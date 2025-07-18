@@ -2,7 +2,7 @@
 provider "google" {
   project = var.project_id
   region  = var.region
-  credentials = file("/home/hampstead_sim/tf-sa-cloudmile.json")
+  # credentials = <creds>
 }
 
 # API

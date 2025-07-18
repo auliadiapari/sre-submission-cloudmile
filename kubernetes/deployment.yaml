@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus-deployment
+  namespace: nexus
+  labels:
+    app: nexus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      securityContext: 
+        fsGroup: 2000
+        runAsUser: 200 
+      containers:
+      - name: nexus
+        image: asia-southeast2-docker.pkg.dev/coastal-wares-466112-d4/nexus-gcp-repo/nexus-rebuild:latest
+        ports:
+        - containerPort: 8081
+          name: nexus
+          protocol: TCP
+          resources:
+            requests:
+            memory: '512Mi'
+            cpu: '1'
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /opt/sonatype/nexus/var
+      volumes:
+      - name: nexus-data
+        persistentVolumeClaim:
+          claimName: nexus-pvc
